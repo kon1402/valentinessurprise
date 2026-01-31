@@ -1037,6 +1037,7 @@
         function runAway() {
             const noBtn = document.getElementById('noBtn2');
             const yesBtn = document.getElementById('yesBtn2');
+            const card = document.getElementById('card4');
             
             // Grow yes button slightly each time
             yesBtnSize2 += 4;
@@ -1048,14 +1049,26 @@
                 noBtn.classList.add('runaway');
             }
             
-            // Calculate safe boundaries
-            const padding = 50;
-            const maxX = window.innerWidth - 150;
-            const maxY = window.innerHeight - 80;
+            // Get card position to keep button nearby
+            const cardRect = card.getBoundingClientRect();
+            const centerX = cardRect.left + cardRect.width / 2;
+            const centerY = cardRect.top + cardRect.height / 2;
             
-            // Generate random position
-            let newX = Math.floor(Math.random() * (maxX - padding)) + padding;
-            let newY = Math.floor(Math.random() * (maxY - padding)) + padding;
+            // Keep button within 300px of card center, but not overlapping the card
+            const minDistance = 150;
+            const maxDistance = 300;
+            
+            // Random angle
+            const angle = Math.random() * Math.PI * 2;
+            const distance = minDistance + Math.random() * (maxDistance - minDistance);
+            
+            let newX = centerX + Math.cos(angle) * distance - 60;
+            let newY = centerY + Math.sin(angle) * distance - 25;
+            
+            // Make sure it stays on screen
+            const padding = 20;
+            newX = Math.max(padding, Math.min(newX, window.innerWidth - 140));
+            newY = Math.max(padding, Math.min(newY, window.innerHeight - 60));
             
             // Apply position
             noBtn.style.left = newX + 'px';
